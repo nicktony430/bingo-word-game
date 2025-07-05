@@ -48,6 +48,7 @@
         <div id="confetti-container" class="fixed inset-0 pointer-events-none hidden">
             <!-- Confetti elements will be added here -->
         </div>
+        <div id="congrats-overlay" class="fixed inset-0 z-50 bg-white bg-opacity-95 flex items-center justify-center hidden" style="backdrop-filter: blur(2px);"></div>
     </div>
 
     <!-- SQLite initialization (using sql.js) -->
@@ -58,6 +59,5 @@
     <script type="module" src="dist/database.js"></script>
     <script type="module" src="dist/audio.js"></script>
     <script type="module" src="dist/game.js"></script>
-    <div id="browser-warning" class="browser-warning hidden">For best results, please use Google Chrome.</div>
 </body>
 </html>

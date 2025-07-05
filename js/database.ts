@@ -58,26 +58,26 @@ class DatabaseManager {
     // Add initial words to the database
     private async addInitialWords() {
         const words: { word: string; category: string; difficulty?: number }[] = [
-            { word: 'ladybug', category: 'regular' },
-            { word: 'barnyard', category: 'regular' },
-            { word: 'cardboard', category: 'regular' },
-            { word: 'passport', category: 'regular' },
-            { word: 'underline', category: 'regular' },
-            { word: 'keyboard', category: 'regular' },
-            { word: 'everyone', category: 'regular' },
-            { word: 'hallway', category: 'regular' },
-            { word: 'dragonfly', category: 'regular' },
-            { word: 'quicksand', category: 'regular' },
-            { word: 'jigsaw', category: 'regular' },
-            { word: 'doorbell', category: 'regular' },
-            { word: 'seafood', category: 'regular' },
-            { word: 'fireplace', category: 'regular' },
-            { word: 'popcorn', category: 'regular' },
-            { word: 'quickly', category: 'review' },
-            { word: 'careful', category: 'review' },
-            { word: 'fearless', category: 'review' },
-            { word: 'wheelbarrow', category: 'challenge' },
-            { word: 'sandcastle', category: 'challenge' }
+            { word: 'chief', category: 'regular' },
+            { word: 'field', category: 'regular' },
+            { word: 'neighbor', category: 'regular' },
+            { word: 'weight', category: 'regular' },
+            { word: 'ceiling', category: 'regular' },
+            { word: 'carriage', category: 'regular' },
+            { word: 'airplane', category: 'regular' },
+            { word: 'trivia', category: 'regular' },
+            { word: 'claim', category: 'regular' },
+            { word: 'tail', category: 'regular' },
+            { word: 'goalie', category: 'regular' },
+            { word: 'nailed', category: 'regular' },
+            { word: 'waiting', category: 'regular' },
+            { word: 'said', category: 'regular' },
+            { word: 'niece', category: 'regular' },
+            { word: 'written', category: 'review' },
+            { word: 'island', category: 'review' },
+            { word: 'wrong', category: 'review' },
+            { word: 'millionaire', category: 'challenge' },
+            { word: 'believe', category: 'challenge' }
         ];
 
         const stmt = this.db.prepare(`
@@ -201,6 +201,26 @@ class DatabaseManager {
             return [];
         }
     }
+
+    // Get the category for a given word
+    async getCategoryForWord(word: string): Promise<string | null> {
+        if (!this.initialized) {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            return this.getCategoryForWord(word);
+        }
+        try {
+            const result = this.db.exec(
+                `SELECT category FROM words WHERE word = ?`, [word.toUpperCase()]
+            );
+            if (result.length > 0 && result[0].values.length > 0) {
+                return result[0].values[0][0];
+            }
+            return null;
+        } catch (error) {
+            console.error('Error getting category for word:', error);
+            return null;
+        }
+    }
 }
 
 // Create and export a singleton instance
@@ -213,4 +233,6 @@ declare global {
         DatabaseManager: DatabaseManager;
     }
 }
-window.DatabaseManager = databaseManager; 
+window.DatabaseManager = databaseManager;
+// Attach getCategoryForWord to the instance for global access
+window.DatabaseManager.getCategoryForWord = databaseManager.getCategoryForWord.bind(databaseManager); 
